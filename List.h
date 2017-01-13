@@ -39,7 +39,7 @@ inline List<T>::List() : m_Head(nullptr), m_Tail(nullptr)
 }
 
 template<typename T>
-inline List<T>::List(const List & copy) 
+inline List<T>::List(const List & copy) :m_Head(nullptr),m_Tail(nullptr)
 {
 
 	*this = copy;
@@ -56,14 +56,14 @@ inline List<T> & List<T>::operator=(const List<T> & rhs)
 {
 	if (this != &rhs) //if left hand side is not the same as the rhs
 	{
-		m_Head = nullptr; // Set Head to nullptr
-		m_Tail = nullptr; // Set Tail to nullptr
-		if (rhs.m_Head)
+		Node<T> * travel = rhs.m_Head;
+		this->Purge();
+		while (travel)
 		{
-			m_Head = rhs.m_Head; //make left head the same as right head
-			m_Tail = rhs.m_Tail; //make left tail the same as right tail
+			this->Append(travel->m_Data);
+			travel = travel->m_Next;
 		}
-		
+
 	}
 
 	return *this;
@@ -77,26 +77,23 @@ inline bool List<T>::isEmpty()
 	{
 		empty = false; //if not empty return false
 	}
-	return empty; 
+	return empty;
 }
 
 template<typename T>
 inline const T & List<T>::First()
 {
-	if (!isEmpty())  //if the list isn't empty
-		return m_Head->m_Data; //return the data at the head node
-	else
+	if (isEmpty())  //if the list isn't empty
 		throw Exception("No Data in First list is empty"); //otherwise throw an exception
-
+	return m_Head->m_Data; //return the data at the head node
 }
 
 template<typename T>
 inline const T & List<T>::Last()
 {
-	if (!isEmpty())
-		return m_Tail->m_Data; //if list isn't empty return data at tail
-	else
+	if (isEmpty())
 		throw Exception("No Data in Last list is empty"); //otherwise throw exception that list was empty
+	return m_Tail->m_Data; //if list isn't empty return data at tail
 }
 
 template<typename T>
@@ -155,7 +152,7 @@ inline void List<T>::Purge()
 	}
 	m_Head = nullptr; //make sure the m_head is nullptr
 	m_Tail = nullptr; //make sure the tail is nullptr
-	
+
 }
 
 template<typename T>
@@ -190,7 +187,7 @@ inline void List<T>::Extract(T data)
 		}
 		else
 		{
-			throw Exception("The data you were looking for wasn't in the list");
+			throw Exception("can't extract because data wasn't in the list");
 		}
 
 	}
@@ -198,7 +195,7 @@ inline void List<T>::Extract(T data)
 	{
 		throw Exception("The List was empty");
 	}
-	
+
 }
 
 template<typename T>
@@ -239,11 +236,16 @@ inline void List<T>::InsertAfter(T lookfordata, T nndata)
 		}
 		else
 		{
+			delete temp;
+			delete NN;
 			throw Exception("Can't insertafter because data you were looking for wasn't in List");
+			
 		}
 	}
 	else
 	{
+		delete temp;
+		delete NN;
 		throw Exception("List is empty can insert After anything in Empty List");
 	}
 	delete temp;
@@ -284,14 +286,19 @@ inline void List<T>::InsertBefore(T lookfordata, T nndata)
 				NN->m_Next = travel;
 				travel->m_Previous = NN;
 			}
+
 		}
 		else
 		{
+			delete temp;
+			delete NN;
 			throw Exception("The data you were looking for wasn't in the list!");
 		}
 	}
 	else
 	{
+		delete temp;
+		delete NN;
 		throw Exception("Your list is Empty!");
 	}
 	delete temp;
@@ -312,24 +319,37 @@ inline Node<T> * List<T>::getTail() const
 template<typename T>
 inline void List<T>::PrintForwards()
 {
-	Node<T> * travel = m_Head;
-	while (travel != nullptr)
+	if (m_Head)
 	{
-		cout << travel->m_Data << ' ';
-		travel = travel->m_Next;
+		Node<T> * travel = m_Head;
+		while (travel != nullptr)
+		{
+			cout << travel->m_Data << ' ';
+			travel = travel->m_Next;
+		}
+	}
+	else
+	{
+		throw Exception("Can't Print List is empty");
 	}
 }
 
 template<typename T>
 inline void List<T>::PrintBackwards()
 {
-	Node<T> * travel = m_Tail;
-	while (travel != nullptr)
+	if (m_Head)
 	{
-		cout << travel->m_Data << ' ';
-		travel = travel->m_Previous;
+		Node<T> * travel = m_Tail;
+		while (travel != nullptr)
+		{
+			cout << travel->m_Data << ' ';
+			travel = travel->m_Previous;
+		}
+	}
+	else
+	{
+		throw Exception("Can't Print List is empty");
 	}
 }
 
 #endif LIST_H
-

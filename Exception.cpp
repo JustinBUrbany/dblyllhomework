@@ -8,7 +8,7 @@ Exception::Exception(char * msg) : m_msg(nullptr)
 {
 	if (msg != nullptr)
 	{
-		m_msg = new char[strlen(msg)];
+		m_msg = new char[strlen(msg)+1];
 		strcpy(m_msg, msg);
 	}
 }
@@ -31,7 +31,7 @@ Exception & Exception::operator=(const Exception & rhs)
 		m_msg = nullptr;
 		if (rhs.m_msg != nullptr)
 		{
-			m_msg = new char[strlen(rhs.m_msg)];
+			m_msg = new char[strlen(rhs.m_msg)+1];
 			strcpy(m_msg, rhs.m_msg);
 		}
 	}
