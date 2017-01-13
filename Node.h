@@ -31,7 +31,7 @@ inline Node<T>::Node() :m_Next(nullptr), m_Previous(nullptr)
 }
 
 template<typename T>
-inline Node<T>::Node(T Data) : m_Data(Data)
+inline Node<T>::Node(T Data) : m_Data(Data), m_Next(nullptr), m_Previous(nullptr)
 {
 }
 
@@ -47,6 +47,8 @@ inline Node<T> & Node<T>::operator=(const Node & rhs)
 	if (this != &rhs)
 	{
 		m_Data = rhs.m_Data;
+		m_Next = rhs.m_Next;
+		m_Previous = rhs.m_Previous;
 	}
 	return *this;
 }
@@ -54,4 +56,7 @@ inline Node<T> & Node<T>::operator=(const Node & rhs)
 template<typename T>
 inline Node<T>::~Node()
 {
+	m_Next = nullptr;
+	m_Previous = nullptr;
 }
+
